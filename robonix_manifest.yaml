@@ -137,8 +137,16 @@ service:
         lidar3d: true       # MID-360 PointCloud2
         rgb: true           # RealSense visual loop closure
         rgbd: true          # RealSense depth → 3D fusion
-        imu: true           # MID-360 IMU
-        odom: false         # chassis odom not wired this run
+        # imu: rtabmap launch doesn't wire IMU yet (the comment in
+        # launch/rtabmap_2d.launch.py promises it but the code isn't
+        # there). Leave OFF for the first bring-up — the MID-360's
+        # lidar alone is usually enough for graph SLAM. Flip to true
+        # once mapping_rbnx grows imu_topic + subscribe_imu wiring.
+        imu: false
+        # odom: chassis is powered off this run; rtabmap derives
+        # odometry internally from lidar (icp_odometry) / RGBD.
+        # Flip to true once ranger_chassis_rbnx is enabled.
+        odom: false
 
   # ── Navigation (TODO) ───────────────────────────────────────────────
   # Will be `nav2_wrapper_rbnx` once we lift it from webots. Disabled

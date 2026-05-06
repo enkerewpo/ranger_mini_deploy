@@ -92,6 +92,21 @@ rbnx caps                      # should list all the contracts above
 Open RViz and load the rtabmap visualization config to see the map
 build up.
 
+## Known gaps to fill before flipping more sensors on
+
+The first bring-up runs rtabmap with **lidar3d + rgbd only** —
+`imu: false` and `odom: false` in the deploy manifest. Reasons:
+
+1. `mapping_rbnx`'s `launch/rtabmap_2d.launch.py` doesn't actually
+   wire `imu_topic` / `subscribe_imu` yet (the file's docstring
+   promises Mid360 IMU integration but the code is not in). The
+   MID-360's lidar alone gets graph SLAM running without it; flip
+   `imu: true` once the launch grows the wiring.
+2. `odom` depends on `ranger_chassis_rbnx`, which is disabled this
+   run because the chassis isn't powered. rtabmap derives its own
+   odom internally from lidar / RGBD when no external odom is
+   supplied.
+
 ## Defer / boot sequencing
 
 The deploy manifest is an unordered list. Boot ordering happens at
